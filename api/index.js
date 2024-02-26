@@ -29,6 +29,9 @@ function getChatText(data){
 
 app.get('/api/ranks', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
+    if(req.query.text){
+        res.setHeader('Content-Type', 'text/plain')
+    }
     res.setHeader('Cache-Control', 'public, s-maxage=60');
     res.setHeader('CDN-Cache-Control', 'public, s-max-age=60');
     res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=120');
@@ -55,6 +58,9 @@ app.get('/api/ranks', (req, res) => {
                         score: mm.score
                     }
                     result.text = getChatText(result);
+                    if(req.query.text){
+                        res.send(result.text)
+                    }
                     res.send(result)
                 }
             });
