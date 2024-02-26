@@ -28,9 +28,10 @@ function getChatText(data){
 }
 
 app.get('/api/ranks', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
     if(req.query.text){
         res.setHeader('Content-Type', 'text/plain')
+    } else {
+        res.setHeader('Content-Type', 'application/json');
     }
     res.setHeader('Cache-Control', 'public, s-maxage=60');
     res.setHeader('CDN-Cache-Control', 'public, s-max-age=60');
