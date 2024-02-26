@@ -28,6 +28,9 @@ function getChatText(data){
 }
 
 app.get('/ranks', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+
     let result = {}
     client.campaigns.currentSeason().then(async campaign=>{
         let total = 100;
