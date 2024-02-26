@@ -27,7 +27,7 @@ function getChatText(data){
     return `MM: ${data.mm?.division} (${ordinal(data.mm?.rank)}) with ${data.mm?.score} points | Campaign: ${ordinal(data.rank)} with ${data.points}`
 }
 
-app.get('/ranks', (req, res) => {
+app.get('/api/ranks', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
 
