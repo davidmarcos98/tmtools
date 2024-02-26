@@ -38,7 +38,7 @@ app.get('/api/ranks', (req, res) => {
         let total = 100;
         while (total < 1000){
             const leaderboard = await campaign.leaderboardLoadMore(100);
-            leaderboard.slice(leaderboard.length - 100).forEach(top=>{
+            leaderboard.slice(leaderboard.length - 100).forEach(async top=>{
                 if (top.playerName == req.query.player){
                     result = {
                         player: top.playerName,
@@ -47,19 +47,19 @@ app.get('/api/ranks', (req, res) => {
                         id: top._data.player.id
                     }
                     total = 1000;
+                    const player = await client.players.get(result.id);
+                    const mm = await player.matchmaking();
+                    result.mm = {
+                        division: mm.division.name,
+                        rank: mm.rank,
+                        score: mm.score
+                    }
+                    result.text = getChatText(result);
+                    res.send(result)
                 }
             });
             total += 100;
         }
-        const player = await client.players.get(result.id);
-        const mm = await player.matchmaking();
-        result.mm = {
-            division: mm.division.name,
-            rank: mm.rank,
-            score: mm.score
-        }
-        result.text = getChatText(result);
-        res.send(result)
     });
 })
 
