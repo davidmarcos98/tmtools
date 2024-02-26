@@ -61,8 +61,9 @@ app.get('/api/ranks', (req, res) => {
                     result.text = getChatText(result);
                     if(req.query.text){
                         res.send(result.text)
+                    } else {
+                        res.send(result)
                     }
-                    res.send(result)
                 }
             });
             total += 100;
