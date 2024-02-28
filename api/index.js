@@ -80,8 +80,10 @@ app.get('/api/larsEmotes', async (req, res) => {
 
     const response = await fetch("https://7tv.io/v3/emote-sets/61df32674a3c173606dbf84e");
     const data = await response.json();
+    const emotes = []
+    data.emotes.forEach(emote => {if(emote.name.toLowerCase().includes('lars')){emotes.push(emote.name)}})
 
-    res.send(data)
+    res.send(emotes)
 })
 
 app.listen(port, () => {
