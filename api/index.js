@@ -71,6 +71,19 @@ app.get('/api/ranks', (req, res) => {
     });
 })
 
+app.get('/api/larsEmotes', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+
+    res.setHeader('Cache-Control', 'public, s-maxage=3600');
+    res.setHeader('CDN-Cache-Control', 'public, s-max-age=3600');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=3600');
+
+    const response = await fetch("https://7tv.io/v3/emote-sets/61df32674a3c173606dbf84e");
+    const data = await response.json();
+
+    res.send(data)
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
