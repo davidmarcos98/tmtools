@@ -3,6 +3,7 @@ const app = express()
 const port = 3000
 const TMIO = require('trackmania.io');
 const ordinal = require('ordinal-number-suffix')
+const sql = require('@vercel/postgres');
 
 client = new TMIO.Client();
 
@@ -33,9 +34,9 @@ app.get('/api/ranks', (req, res) => {
     } else {
         res.setHeader('Content-Type', 'application/json');
     }
-    res.setHeader('Cache-Control', 'public, s-maxage=60');
-    res.setHeader('CDN-Cache-Control', 'public, s-max-age=60');
-    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=120');
+    res.setHeader('Cache-Control', 'public, s-maxage=180');
+    res.setHeader('CDN-Cache-Control', 'public, s-max-age=180');
+    res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=180');
 
     let result = {}
     client.campaigns.currentSeason().then(async campaign=>{
@@ -86,6 +87,11 @@ app.get('/api/larsEmotes', async (req, res) => {
     res.send(emotes)
 })
 
+app.get('/api/kackyfins', async (req, res) => {
+    const pets = await sql.sql(`SELECT * FROM kackyfins;`);
+    res.send(pets)
+
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
