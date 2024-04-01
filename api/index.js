@@ -5,7 +5,7 @@ const TMIO = require('trackmania.io');
 const ordinal = require('ordinal-number-suffix')
 const sql = require('@vercel/postgres');
 
-client = new TMIO.Client();
+
 
 async function getPlayerMMData(playerId){
     await client.players.get(playerId).then(async player=>{
@@ -29,6 +29,7 @@ function getChatText(data){
 }
 
 app.get('/api/ranks', (req, res) => {
+    client = new TMIO.Client();
     if(req.query.text){
         res.setHeader('Content-Type', 'text/plain')
     } else {
@@ -39,9 +40,12 @@ app.get('/api/ranks', (req, res) => {
     res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=180');
 
     let result = {}
+    console.log('AAAA')
     client.campaigns.currentSeason().then(async campaign=>{
         let total = 100;
         while (total < 1000){
+            console.log(total)
+            console.log('hey')
             const leaderboard = await campaign.leaderboardLoadMore(100);
             leaderboard.slice(leaderboard.length - 100).forEach(async top=>{
                 if (top.playerName == req.query.player){
@@ -65,6 +69,7 @@ app.get('/api/ranks', (req, res) => {
                     } else {
                         res.send(result)
                     }
+                    total = 1000;
                 }
             });
             total += 100;
