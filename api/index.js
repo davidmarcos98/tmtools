@@ -90,7 +90,7 @@ app.get("/api/larsEmotes", async (req, res) => {
   const customEmotes = await fetch(
     "https://gist.githubusercontent.com/davidmarcos98/36a872b47aef8ad1e77deb7d569b8a52/raw/f8ef7dfb1d3c7902f149039bf2bce645517c7557/gamblars.json"
   );
-  const customData = await customEmotes.json();
+  let customData = await customEmotes.json();
   customData = customData.map((emote) => emote.toLowerCase());
   const data = await response.json();
   const emotes = [];
