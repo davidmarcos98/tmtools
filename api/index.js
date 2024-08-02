@@ -122,7 +122,7 @@ app.get("/api/rmcrecords", async (req, res) => {
       rmcData[0].goals
     } ATs and ${rmcData[0].belowGoals} golds. RMS: ${
       rmsData.length > 0
-        ? `${rmsData[0].displayName} with ${rmsData[0].goals} ATs and ${rmsData[0].belowGoals} skips.`
+        ? `${rmsData[0].displayName} with ${rmsData[0].goals} ATs and ${rmsData[0].skips} skips.`
         : "None"
     }`
   );
