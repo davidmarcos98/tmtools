@@ -40,12 +40,9 @@ app.get("/api/ranks", (req, res) => {
   res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=180");
 
   let result = {};
-  console.log("AAAA");
   client.campaigns.currentSeason().then(async (campaign) => {
     let total = 100;
     while (total < 1000) {
-      console.log(total);
-      console.log("hey");
       const leaderboard = await campaign.leaderboardLoadMore(100);
       leaderboard.slice(leaderboard.length - 100).forEach(async (top) => {
         if (top.playerName == req.query.player) {
@@ -104,6 +101,31 @@ app.get("/api/larsEmotes", async (req, res) => {
   });
 
   res.send(emotes);
+});
+app.get("/api/rmcrecords", async (req, res) => {
+  res.setHeader("Content-Type", "text/plain");
+
+  res.setHeader("Cache-Control", "public, s-maxage=3600");
+  res.setHeader("CDN-Cache-Control", "public, s-max-age=3600");
+  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=3600");
+  const rmc = await fetch(
+    "https://www.flinkblog.de/RMC/api/rmc.php?year=2024&objective=author"
+  );
+  const rms = await fetch(
+    "https://www.flinkblog.de/RMC/api/rms.php?year=2024&objective=author"
+  );
+  const rmcData = await rmc.json();
+  const rmsData = await rms.json();
+
+  res.send(
+    `2024 Records: RMC: ${rmcData[0].displayName} with ${
+      rmcData[0].goals
+    } ATs and ${rmcData[0].belowGoals} golds. RMS: ${
+      rmsData.length > 0
+        ? `${rmsData[0].displayName} with ${rmsData[0].goals} ATs and ${rmsData[0].belowGoals} skips.`
+        : "None"
+    }`
+  );
 });
 
 app.get("/api/kackyfins", async (req, res) => {
