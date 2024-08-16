@@ -28,6 +28,12 @@ function getChatText(data) {
   } points | Campaign: ${ordinal(data.rank)} with ${data.points}`;
 }
 
+function getMMChatText(data) {
+  return `${data.division.name} (${ordinal(data.rank)}) with ${
+    data.score
+  } points.`;
+}
+
 app.get("/api/ranks", (req, res) => {
   client = new TMIO.Client();
   if (req.query.text) {
@@ -35,9 +41,9 @@ app.get("/api/ranks", (req, res) => {
   } else {
     res.setHeader("Content-Type", "application/json");
   }
-  res.setHeader("Cache-Control", "public, s-maxage=180");
-  res.setHeader("CDN-Cache-Control", "public, s-max-age=180");
-  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=180");
+  res.setHeader("Cache-Control", "public, s-maxage=30");
+  res.setHeader("CDN-Cache-Control", "public, s-max-age=30");
+  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=30");
 
   let result = {};
   client.campaigns.currentSeason().then(async (campaign) => {
@@ -72,6 +78,25 @@ app.get("/api/ranks", (req, res) => {
       total += 100;
     }
   });
+});
+
+app.get("/api/mmrank", (req, res) => {
+  client = new TMIO.Client();
+  if (req.query.text) {
+    res.setHeader("Content-Type", "text/plain");
+  } else {
+    res.setHeader("Content-Type", "application/json");
+  }
+  res.setHeader("Cache-Control", "public, s-maxage=30");
+  res.setHeader("CDN-Cache-Control", "public, s-max-age=30");
+  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=30");
+
+  let result = {};
+  client.players.get(req.query.player).then(async player => {
+    const mm = await player.matchmaking();
+    let text = getMMChatText(mm);
+    res.send(text);
+  })
 });
 
 app.get("/api/larsEmotes", async (req, res) => {
